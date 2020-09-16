@@ -1,7 +1,7 @@
 /*
 Programmers
 Level 1 - Java
-연습문제
+
 K번째수
 
 https://programmers.co.kr/learn/courses/30/lessons/42748
