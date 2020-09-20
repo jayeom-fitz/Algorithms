@@ -11,74 +11,73 @@ import java.util.PriorityQueue;
 
 class Solution {
     public static int solution(String name) {
-        int answer = -1;
+        int answer = 0;
         
         int length = name.length();
         
-        String s = "";
+        int A = 0;
+        int min = 0;
         
-        for(int i=0; i<length; i++) {
-        	answer += 1 + countChangeChar('A', name.charAt(i));
-        	s += "A";
+        for(int i=length-1; i>=0; i--) {
+        	A *= 2;
+        	if(name.charAt(i) != 'A') A++;
         }
         
-        System.out.println(answer);
+        if(A % 2 == 1) {
+        	min = countChangeChar('A', name.charAt(0));
+        	A--;
+        }
         
         PriorityQueue<Move> pq = new PriorityQueue<Move>();
-        pq.add(new Move(0, 0, s));
+        pq.add(new Move(min, 0, A));
         
         while(!pq.isEmpty()) {
         	Move m = pq.poll();
         	
-        	if(m.count > answer) continue;
-        	if(m.str.equals(name)) {
+        	if(m.a == 0) {
         		return m.count;
         	}
         	
-        	for(int i=0; i<length; i++) {
-        		if(name.charAt(i) != m.str.charAt(i)) {
-        			
-        			int count = m.count + countChangeChar(name.charAt(i), m.str.charAt(i)) + countCursor(m.cursor, i, length);
-        			
-        			if(count > answer) continue;
-        			
-        			pq.add(new Move(count, i, replaceChar(m.str, i, name.charAt(i))));
-        		}
-        	}
+        	Move m1 = new Move(m.count, m.cursor, m.a);
+        	Move m2 = new Move(m.count, m.cursor, m.a);
+        	
+        	pq.add(movement(1, length, m1, name));
+        	pq.add(movement(-1, length, m2, name));
         }
         
         return answer;
     }
 	
-	static int countCursor(int p1, int p2, int length) {
-		return Math.min(Math.abs(p1-p2), length - Math.abs(p1-p2));
-	}
-	
 	static int countChangeChar(char c1, char c2) {
 		return Math.min(Math.abs(c1-c2), 26 - Math.abs(c1-c2));
 	}
 	
-	static String replaceChar(String str, int pos, char ch) {
-		if(pos == 0) {
-			str = ch + str.substring(1);
-		} else if(pos == str.length()-1) {
-			str = str.substring(0, str.length()-1) + ch;
-		} else {
-			str = str.substring(0, pos) + ch + str.substring(pos+1);
+	static Move movement(int dir, int length, Move m, String s) {
+		for(int i=1; ; i++) {
+			m.cursor += dir;
+			
+			if(m.cursor < 0) m.cursor = length - 1;
+			else if(m.cursor >= length) m.cursor = 0;
+			
+			if((m.a >> m.cursor) % 2 == 1) {
+				m.a -= Math.pow(2, m.cursor);
+				m.count += i + countChangeChar('A', s.charAt(m.cursor));
+				break;
+			}
 		}
 		
-		return str;
+		return m;
 	}
 	
 	static class Move implements Comparable<Move> {
 		int count;
 		int cursor;
-		String str;
+		int a;
 		
-		Move(int count, int cursor, String str) {
+		Move(int count, int cursor, int a) {
 			this.count = count;
 			this.cursor = cursor;
-			this.str = str;
+			this.a = a;
 		}
 
 		@Override
