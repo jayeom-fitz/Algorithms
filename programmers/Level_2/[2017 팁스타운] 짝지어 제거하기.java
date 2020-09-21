@@ -1,7 +1,6 @@
 /*
 Programmers
 Level 2 - Java
-연습문제
 2017 팁스타운
 짝지어 제거하기
 
