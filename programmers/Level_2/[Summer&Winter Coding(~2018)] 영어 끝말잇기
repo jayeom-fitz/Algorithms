@@ -1,0 +1,34 @@
+/*
+Programmers
+Level 2 - Java
+Summer/Winter Coding(~2018)
+영어 끝말잇기
+
+https://programmers.co.kr/learn/courses/30/lessons/12981
+*/
+
+class Solution {
+    public static int[] solution(int n, String[] words) {
+        int[] answer = new int[2];
+        int idx = 1;
+        
+        while(idx < words.length) {
+        	if(words[idx].charAt(0) != words[idx-1].charAt(words[idx-1].length()-1) 
+        			|| search(idx, words)) {
+        		answer[0] = idx % n + 1;
+        		answer[1] = idx / n + 1;
+        		return answer;
+        	}else
+        		idx++;
+        }
+  
+        return answer;
+    }
+	
+	public static boolean search(int n, String[] words) {
+		for(int i=0; i<n; i++)
+			if(words[i].equals(words[n]))
+				return true;
+		return false;
+	}
+}
