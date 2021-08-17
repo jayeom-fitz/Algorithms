@@ -1,13 +1,15 @@
-d = [[0 for j in range(5)] for i in range(5)]
+a = {'alice': [1, 2, 3], 'bob': 20, 'tony': 15, 'suzy': 30}
+b = dict(a)
+a
 
-d2 = d
+print(id(a))
+print(id(b))
 
-print(d2)
+b['alice'].append(5)
 
-d[0][0] = 1
+print(a)
+print(b)
 
-print(d2)
-
-d2[1][0] = 2
-
-print(d)
+print(b.get('bob'))
+b['bob'] += 20
+print(b.get('bob'))
